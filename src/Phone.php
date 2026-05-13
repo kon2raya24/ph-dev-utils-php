@@ -53,9 +53,9 @@ final class Phone
         $d = self::digits($input);
 
         if (str_starts_with($d, '63') && strlen($d) === 12) $d = '0' . substr($d, 2);
-        if (str_starts_with($d, '9')  && strlen($d) === 10) $d = '0' . $d;
+        if (strlen($d) === 10 && preg_match('/^[89]/', $d)) $d = '0' . $d;
 
-        if (strlen($d) !== 11 || !str_starts_with($d, '09')) return null;
+        if (strlen($d) !== 11 || !preg_match('/^0[89]/', $d)) return null;
 
         $prefix = substr($d, 0, 4);
         $network = self::lookupNetwork($prefix);
