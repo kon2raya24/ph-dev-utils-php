@@ -1,9 +1,9 @@
 {
   "name": "phdevutils/core",
-  "description": "Filipino developer utilities — peso, government IDs, phone, address.",
+  "description": "Filipino developer utilities — peso, government IDs (TIN/SSS/PhilHealth/Pag-IBIG), phone, address (regions/provinces/cities/municipalities), and PH holidays (regular + special, with DOLE pay multipliers).",
   "type": "library",
   "license": "MIT",
-  "keywords": ["philippines", "filipino", "peso", "tin", "sss", "philhealth", "pagibig", "psgc"],
+  "keywords": ["philippines", "filipino", "peso", "tin", "sss", "philhealth", "pagibig", "psgc", "holidays", "labor-day", "dole"],
   "require": {
     "php": ">=8.1"
   },
