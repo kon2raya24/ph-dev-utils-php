@@ -88,13 +88,21 @@ final class Address
     {
         $q = strtolower(trim($query));
         if ($q === '') return null;
-        $normQ = self::normalizeCityName($query);
 
         $data = DataLoader::load('psgc-cities-municipalities-2024');
+
+        // Pass 1: exact code or exact name match. Guarantees an unambiguous query
+        // like "Quezon City" returns the literal NCR entry rather than fuzzy-matching
+        // the "Quezon" municipality in Cagayan Valley via the normalizer.
         foreach ($data['cities_municipalities'] as $c) {
             if ($c['code'] === $q) return $c;
-            $name = strtolower($c['name']);
-            if ($name === $q) return $c;
+            if (strtolower($c['name']) === $q) return $c;
+        }
+
+        // Pass 2: fall back to normalized name (strips leading "city of " / trailing
+        // " city") so PSA's "City of Cebu" matches "Cebu City" or "Cebu".
+        $normQ = self::normalizeCityName($query);
+        foreach ($data['cities_municipalities'] as $c) {
             if (self::normalizeCityName($c['name']) === $normQ) return $c;
         }
         return null;

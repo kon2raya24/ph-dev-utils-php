@@ -110,6 +110,17 @@ final class AddressTest extends TestCase
         $this->assertNull(Address::findCityMunicipality('Atlantis'));
     }
 
+    public function testFindCityMunicipalityPrefersExactNameOverFuzzy(): void
+    {
+        // v0.3.1 regression: pre-fix, "Quezon City" normalized to "quezon" and
+        // matched the Quezon municipality in Cagayan Valley (region '02') before
+        // reaching the literal NCR entry. The exact-name pass now runs first.
+        $qc = Address::findCityMunicipality('Quezon City');
+        $this->assertSame('137404', $qc['code']);
+        $this->assertSame('13', $qc['region']);
+        $this->assertNull($qc['province']);
+    }
+
     public function testHUCEntries(): void
     {
         $hucs = array_values(array_filter(
