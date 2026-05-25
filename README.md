@@ -71,6 +71,24 @@ Peso::toWords(1234.56);       // 'one thousand two hundred thirty-four pesos and
 Peso::toWords(-50);           // 'negative fifty pesos'
 ```
 
+#### `Peso::toWordsFilipino(float $value): string` (v0.3)
+
+Convert to **Filipino (Tagalog)** peso-and-centavos word form, using the check/receipt convention `[whole-words] at [XX]/100 piso`. Handles ligature rules and the `daan`/`raan` initial-consonant alternation.
+
+```php
+Peso::toWordsFilipino(1);            // 'Isang piso'
+Peso::toWordsFilipino(100);          // 'Isang daang piso'
+Peso::toWordsFilipino(400);          // 'Apat na raang piso'
+Peso::toWordsFilipino(1000);         // 'Isang libong piso'
+Peso::toWordsFilipino(1_000_000);    // 'Isang milyong piso'
+Peso::toWordsFilipino(12345.67);     // "Labindalawang libo tatlong daan apatnapu't lima at 67/100 piso"
+Peso::toWordsFilipino(0);            // 'Sero piso'
+Peso::toWordsFilipino(0.5);          // 'Sero at 50/100 piso'
+Peso::toWordsFilipino(-1);           // throws OutOfRangeException
+```
+
+Range: `sero` (0) through `trilyon` (10^12).
+
 ---
 
 ### Government ID validators (`PhDevUtils\Validators\*`)
@@ -231,7 +249,8 @@ Direct mapping to the JavaScript sibling package:
 | --- | --- | --- |
 | Format peso | `Peso::format($n)` | `formatPHP(n)` |
 | Parse peso | `Peso::parse($s)` | `parsePHP(s)` |
-| Peso to words | `Peso::toWords($n)` | `pesoToWords(n)` |
+| Peso to words (English) | `Peso::toWords($n)` | `pesoToWords(n)` |
+| Peso to words (Filipino) | `Peso::toWordsFilipino($n)` | `pesoToWordsFilipino(n)` |
 | Validate TIN | `Validators\Tin::validate($s)` | `validateTIN(s)` |
 | Validate SSS | `Validators\Sss::validate($s)` | `validateSSS(s)` |
 | Validate PhilHealth | `Validators\PhilHealth::validate($s)` | `validatePhilHealth(s)` |
