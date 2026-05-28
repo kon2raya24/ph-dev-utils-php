@@ -97,6 +97,23 @@ final class Phone
         return null;
     }
 
+    /** E.164 form (+63…) for any recognized PH mobile or landline; null if unparseable. */
+    public static function toE164(string $input): ?string
+    {
+        $mobile = self::parseMobile($input);
+        if ($mobile !== null) return $mobile['e164'];
+        $landline = self::parseLandline($input);
+        if ($landline !== null) return $landline['e164'];
+        return null;
+    }
+
+    /** National trunk form (0…) for any recognized PH mobile or landline; null if unparseable. */
+    public static function toNational(string $input): ?string
+    {
+        $e164 = self::toE164($input);
+        return $e164 !== null ? '0' . substr($e164, 3) : null;
+    }
+
     private static function lookupNetwork(string $prefix): ?string
     {
         $data = DataLoader::load('network-prefixes');

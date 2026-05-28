@@ -52,4 +52,21 @@ final class PhoneTest extends TestCase
         $this->assertSame('32', $r['areaCode']);
         $this->assertSame('Cebu', $r['area']);
     }
+
+    public function testToE164(): void
+    {
+        $this->assertSame('+639171234567', Phone::toE164('09171234567'));
+        $this->assertSame('+639171234567', Phone::toE164('+63 917 123 4567'));
+        $this->assertSame('+639171234567', Phone::toE164('639171234567'));
+        $this->assertSame('+63281234567', Phone::toE164('(02) 8123-4567'));
+        $this->assertNull(Phone::toE164('12345'));
+    }
+
+    public function testToNational(): void
+    {
+        $this->assertSame('09171234567', Phone::toNational('+639171234567'));
+        $this->assertSame('09171234567', Phone::toNational('639171234567'));
+        $this->assertSame('0281234567', Phone::toNational('(02) 8123-4567'));
+        $this->assertNull(Phone::toNational('nope'));
+    }
 }
