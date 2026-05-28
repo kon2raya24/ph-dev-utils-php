@@ -13,6 +13,8 @@ use PhDevUtils\Validators\NationalId;
 use PhDevUtils\Validators\Umid;
 use PhDevUtils\Validators\Passport;
 use PhDevUtils\Validators\Prc;
+use PhDevUtils\Validators\DriversLicense;
+use PhDevUtils\Validators\Plate;
 
 final class ValidatorsTest extends TestCase
 {
@@ -79,5 +81,25 @@ final class ValidatorsTest extends TestCase
         $this->assertSame('1234567', Prc::format('123-4567'));
         $this->assertFalse(Prc::validate('123456'));
         $this->assertNull(Prc::format('12345678'));
+    }
+
+    public function testDriversLicense(): void
+    {
+        $this->assertTrue(DriversLicense::validate('N02-12-345678'));
+        $this->assertTrue(DriversLicense::validate('n0212345678'));
+        $this->assertSame('N02-12-345678', DriversLicense::format('N0212345678'));
+        $this->assertFalse(DriversLicense::validate('0212345678'));
+        $this->assertNull(DriversLicense::format('nope'));
+    }
+
+    public function testPlate(): void
+    {
+        $this->assertSame('car', Plate::parse('ABC 1234')['type']);
+        $this->assertSame('car', Plate::parse('NBC123')['type']);
+        $this->assertSame('motorcycle', Plate::parse('AB 12345')['type']);
+        $this->assertSame('motorcycle', Plate::parse('A123BC')['type']);
+        $this->assertTrue(Plate::validate('abc-1234'));
+        $this->assertFalse(Plate::validate('12345'));
+        $this->assertNull(Plate::parse('ABCD12345'));
     }
 }
